@@ -1,0 +1,38 @@
+{
+  "name": "pingframework/streams",
+  "description": "Ping Streams is simple port of Java8 Streams API to PHP.",
+  "keywords": [
+    "ping",
+    "framework",
+    "streams",
+    "java",
+    "port"
+  ],
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Oleg Bronzov",
+      "email": "oleg.bronzov@gmail.com"
+    }
+  ],
+  "require": {
+    "php": ">=8.1",
+    "phpoption/phpoption": "^1.9"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "*"
+  },
+  "autoload": {
+    "psr-4": {
+      "Pingframework\\Streams\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Pingframework\\Streams\\Tests\\": "tests/"
+    }
+  },
+  "scripts": {
+    "tests": "phpunit --coverage-clover=coverage.xml"
+  }
+}
