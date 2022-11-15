@@ -36,6 +36,7 @@ declare(strict_types=1);
 namespace Pingframework\Streams\Interfaces;
 
 use ArrayObject;
+use Generator;
 
 /**
  * @author    Oleg Bronzov <oleg.bronzov@gmail.com>
@@ -77,7 +78,14 @@ interface StreamConvertable
      *
      * @param ArrayObject|null $object ArrayObject instance.
      *
-     * @return object
+     * @return ArrayObject
      */
-    public function toArrayObject(?ArrayObject $object = null): object;
+    public function toArrayObject(?ArrayObject $object = null): ArrayObject;
+
+    /**
+     * Converts stream to generator.
+     *
+     * @return Generator
+     */
+    public function toGenerator(): Generator;
 }

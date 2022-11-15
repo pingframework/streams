@@ -3,6 +3,7 @@
 namespace Pingframework\Streams\Composition;
 
 use ArrayObject;
+use Generator;
 
 trait StreamConvertorTrait
 {
@@ -55,9 +56,9 @@ trait StreamConvertorTrait
      *
      * @param ArrayObject|null $object ArrayObject instance.
      *
-     * @return object
+     * @return ArrayObject
      */
-    public function toArrayObject(?ArrayObject $object = null): object
+    public function toArrayObject(?ArrayObject $object = null): ArrayObject
     {
         if ($object === null) {
             return new ArrayObject($this->elements);
@@ -67,5 +68,17 @@ trait StreamConvertorTrait
             $object->offsetSet($k, $v);
         }
         return $object;
+    }
+
+    /**
+     * Converts stream to generator.
+     *
+     * @return Generator
+     */
+    public function toGenerator(): Generator
+    {
+        foreach ($this->elements as $key => $value) {
+            yield $key => $value;
+        }
     }
 }

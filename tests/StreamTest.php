@@ -30,6 +30,30 @@ class StreamTest extends TestCase
         $this->assertSame(['a0', 'b1', 'c2'], $actual);
     }
 
+    public function testToGenerator()
+    {
+        $gen = Stream::of(['A', 'b', 'C'])
+            ->toGenerator();
+
+        $actual = [];
+        foreach ($gen as $value) {
+            $actual[] = $value;
+        }
+
+        $this->assertSame(['A', 'b', 'C'], $actual);
+    }
+
+    public function testOfGenerator()
+    {
+        $gen = Stream::of(['A' => 10, 'b' => 20, 'C' => 30])
+            ->toGenerator();
+
+        $actual = Stream::of($gen)
+            ->toMap();
+
+        $this->assertSame(['A' => 10, 'b' => 20, 'C' => 30], $actual);
+    }
+
     public function testFilter()
     {
         $test = $this;
