@@ -411,12 +411,12 @@ class StreamTest extends TestCase
         ], $actual);
     }
 
-    public function testIndexBy()
+    public function testRemapBy()
     {
         $test = $this;
 
         $actual = Stream::ofRange(1, 4)
-            ->remap(function ($value, $index) use ($test) {
+            ->remapBy(function ($value, $index) use ($test) {
                 $test->assertEquals(1, $value - $index);
 
                 return $value + 3;
@@ -431,12 +431,70 @@ class StreamTest extends TestCase
         ], $actual);
     }
 
-    public function testIndexBy_indexCollision_acceptLastElement()
+    public function testRemap()
+    {
+        $test = $this;
+
+        $actual = Stream::of(['a' => 1, 'b' => 2, 'c' => 3])
+            ->remap(['a' => 'd', 'b' => 'e', 'c' => 'f'])
+            ->toMap();
+
+        $this->assertSame([
+            'd' => 1,
+            'e' => 2,
+            'f' => 3,
+        ], $actual);
+    }
+
+    public function testRemap_keyNotExists()
+    {
+        $test = $this;
+
+        $actual = Stream::of(['a' => 1, 'b' => 2, 'c' => 3])
+            ->remap(['x' => 'z'])
+            ->toMap();
+
+        $this->assertSame([
+            'a' => 1,
+            'b' => 2,
+            'c' => 3,
+        ], $actual);
+    }
+
+    public function testRemapAll()
+    {
+        $test = $this;
+
+        $actual = Stream::of([['a' => 1, 'b' => 2, 'c' => 3]])
+            ->remapAll(['a' => 'd', 'b' => 'e', 'c' => 'f'])
+            ->toMap();
+
+        $this->assertSame([[
+            'd' => 1,
+            'e' => 2,
+            'f' => 3,
+        ]], $actual);
+    }
+
+    public function testRemapAll_keyNotExists()
+    {
+        $test = $this;
+
+        $actual = Stream::of([['a' => 1, 'b' => 2, 'c' => 3]])
+            ->remapAll(['x' => 'z', 'a' => 'A'])
+            ->toMap();
+
+        $this->assertSame([[
+            'A' => 1,
+            'b' => 2,
+            'c' => 3,
+        ]], $actual);
+    }
+
+    public function testRemapBy_indexCollision_acceptLastElement()
     {
         $actual = Stream::ofRange(1, 4)
-            ->remap(function ($value) {
-                return 1;
-            })
+            ->remapBy(fn(int $value): int => 1)
             ->toMap();
 
         $this->assertSame([1 => 4], $actual);
