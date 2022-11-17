@@ -3,9 +3,11 @@
 namespace Pingframework\Streams\Tests;
 
 use ArrayObject;
+use InvalidArgumentException;
 use LogicException;
 use PhpOption\Option;
 use PHPUnit\Framework\TestCase;
+use Pingframework\Streams\Helpers\is;
 use Pingframework\Streams\Stream;
 use stdClass;
 
@@ -326,6 +328,16 @@ class StreamTest extends TestCase
             });
 
         $this->assertTrue($actual);
+    }
+
+    public function testAllMatchOrThrow()
+    {
+        Stream::of([new StdClass(), new StdClass()])
+            ->allMatchOrThrow(is::instanceOf(StdClass::class));
+
+        $this->expectException(InvalidArgumentException::class);
+        Stream::of([new StdClass(), "", new StdClass()])
+            ->allMatchOrThrow(is::instanceOf(StdClass::class));
     }
 
     public function testAllMatch_givenArrayWithValue_fewValuesMatch_expectFalse()

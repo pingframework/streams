@@ -174,6 +174,11 @@ class Predicates
         return fn(mixed $object): bool => !$predicate($object);
     }
 
+    public static function instanceOf(string $type): callable
+    {
+        return fn(mixed $object): bool => $object instanceof $type;
+    }
+
     public static function andX(callable $predicate1, ?callable $predicate2 = null): callable
     {
         /**

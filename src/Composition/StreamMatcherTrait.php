@@ -2,8 +2,10 @@
 
 namespace Pingframework\Streams\Composition;
 
+use InvalidArgumentException;
 use PhpOption\None;
 use PhpOption\Option;
+use Throwable;
 
 trait StreamMatcherTrait
 {
@@ -29,6 +31,27 @@ trait StreamMatcherTrait
         }
 
         return true;
+    }
+
+    /**
+     * Checks if all elements of the stream match given predicate or throws passed exception.
+     *
+     * @template T
+     *
+     * @param callable              $predicate   Predicate to test each element.
+     * @param string|Throwable|null $description Error message or exception to throw if the predicate is not satisfied.
+     *                                           If null is passed, InvalidArgumentException is thrown.
+     *
+     * @return static
+     */
+    public function allMatchOrThrow(callable $predicate, string|null|Throwable $description = null): static
+    {
+        if ($description === null) {
+            $description = new InvalidArgumentException('Not all elements match given predicate.');
+        }
+
+        assert($this->allMatch($predicate), $description);
+        return $this;
     }
 
     /**

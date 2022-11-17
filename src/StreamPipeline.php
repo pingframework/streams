@@ -39,6 +39,7 @@ use Pingframework\Streams\Pipeline\PipelineNonCallablePuppet;
 use Pingframework\Streams\Pipeline\PipelinePuppet;
 use Pingframework\Streams\Pipeline\PipelineTypeEnum;
 use RuntimeException;
+use Throwable;
 
 /**
  * @author    Oleg Bronzov <oleg.bronzov@gmail.com>
@@ -312,6 +313,13 @@ class StreamPipeline
     public function map(callable $func): static
     {
         $this->checkTerminalOperation();
+        $this->operations[] = array(__FUNCTION__, func_get_args());
+        return $this;
+    }
+
+    public function allMatchOrThrow(callable $predicate, string|null|Throwable $description = null): static
+    {
+        $this->checkTerminalOperation(__FUNCTION__);
         $this->operations[] = array(__FUNCTION__, func_get_args());
         return $this;
     }

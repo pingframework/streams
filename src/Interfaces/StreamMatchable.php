@@ -36,6 +36,7 @@ declare(strict_types=1);
 namespace Pingframework\Streams\Interfaces;
 
 use PhpOption\Option;
+use Throwable;
 
 /**
  * @author    Oleg Bronzov <oleg.bronzov@gmail.com>
@@ -56,6 +57,19 @@ interface StreamMatchable
      * @see noneMatch
      */
     public function allMatch(callable $predicate): bool;
+
+    /**
+     * Checks if all elements of the stream match given predicate or throws passed exception.
+     *
+     * @template T
+     *
+     * @param callable              $predicate   Predicate to test each element.
+     * @param string|Throwable|null $description Error message or exception to throw if the predicate is not satisfied.
+     *                                           If null is passed, InvalidArgumentException is thrown.
+     *
+     * @return static
+     */
+    public function allMatchOrThrow(callable $predicate, string|null|Throwable $description): static;
 
     /**
      * Returns true when at least one element matches given predicate.
