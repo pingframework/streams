@@ -48,8 +48,8 @@ trait StreamBuilderTrait
      */
     static public function ofString(string $separator = '', string ...$string): StreamInterface
     {
-        $stream = new Stream();
-        array_push($stream->elements, ...array_map(fn($string) => explode($separator, $string), $string));
+        $stream = new Stream($string);
+        $stream->flatMap(fn(string $string): array => explode($separator, $string));
         return $stream;
     }
 

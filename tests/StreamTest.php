@@ -7,12 +7,41 @@ use InvalidArgumentException;
 use LogicException;
 use PhpOption\Option;
 use PHPUnit\Framework\TestCase;
+use Pingframework\Streams\Helpers\func;
 use Pingframework\Streams\Helpers\is;
 use Pingframework\Streams\Stream;
 use stdClass;
 
 class StreamTest extends TestCase
 {
+    public function testCreationFromSingleString()
+    {
+        $actual = Stream::ofString(",", '1, 2, 42')
+            ->map(func::unary('trim'))
+            ->map(func::unary('intval'))
+            ->toList();
+
+        $this->assertSame([1, 2, 42], $actual);
+    }
+
+    public function testCreationFromMultiString()
+    {
+        $actual = Stream::ofString(",", '1, 2', '42, 24')
+            ->map(func::unary('trim'))
+            ->map(func::unary('intval'))
+            ->toList();
+
+        $this->assertSame([1, 2, 42, 24], $actual);
+    }
+
+    public function testCreationFromRange()
+    {
+        $actual = Stream::ofRange(1, 5)
+            ->toList();
+
+        $this->assertSame([1, 2, 3, 4, 5], $actual);
+    }
+
     public function testCreationFromIterator()
     {
         $actual = Stream::of(new ArrayObject([1, 2, 3]))
