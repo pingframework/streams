@@ -24,6 +24,16 @@ class StreamTest extends TestCase
         $this->assertSame([1, 2, 42], $actual);
     }
 
+    public function testCreationFromRegex()
+    {
+        $actual = Stream::ofRegex("/(?<!\\\\)\./", '1. 2\.5. 42')
+            ->map(func::unary('trim'))
+            ->map(fn(string $string): float => (float)str_replace('\.', '.', $string))
+            ->toList();
+
+        $this->assertSame([1.0, 2.5, 42.0], $actual);
+    }
+
     public function testCreationFromMultiString()
     {
         $actual = Stream::ofString(",", '1, 2', '42, 24')

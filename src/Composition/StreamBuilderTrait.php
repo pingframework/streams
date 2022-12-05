@@ -54,6 +54,21 @@ trait StreamBuilderTrait
     }
 
     /**
+     * Builds new stream from given string split by given regular expression.
+     *
+     * @param string $pattern   Regular expression pattern.
+     * @param string ...$string String to build stream from.
+     *
+     * @return StreamInterface
+     */
+    static public function ofRegex(string $pattern, string ...$string): StreamInterface
+    {
+        $stream = new Stream($string);
+        $stream->flatMap(fn(string $string): array => preg_split($pattern, $string));
+        return $stream;
+    }
+
+    /**
      * Builds new stream containing a range of elements.
      * @link https://php.net/manual/en/function.range.php
      *
