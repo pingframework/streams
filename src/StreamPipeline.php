@@ -380,7 +380,21 @@ class StreamPipeline
         return $this->nonCallablePuppet();
     }
 
-    public function remap(callable $func): static
+    public function remap(array $newKeysMap, bool $skipOnFail = true): static
+    {
+        $this->checkTerminalOperation();
+        $this->operations[] = array(__FUNCTION__, func_get_args());
+        return $this;
+    }
+
+    public function remapAll(array $newKeysMap, bool $skipOnFail = true): static
+    {
+        $this->checkTerminalOperation();
+        $this->operations[] = array(__FUNCTION__, func_get_args());
+        return $this;
+    }
+
+    public function remapBy(callable $func): static
     {
         $this->checkTerminalOperation();
         $this->operations[] = array(__FUNCTION__, func_get_args());
